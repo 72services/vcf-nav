@@ -1,8 +1,8 @@
 {
   "name": "@72services/vcf-nav",
-  "version": "1.0.2",
-   "homepage": "https://github.com/simasch/vcf-nav",
-  "repository": "https://github.com/simasch/vcf-nav",
+  "version": "1.0.4",
+  "homepage": "https://github.com/72services/vcf-nav",
+  "repository": "https://github.com/72services/vcf-nav",
   "description": "",
   "main": "vcf-nav.ts",
   "keywords": [
