@@ -1,46 +1,47 @@
-import { html, css, LitElement } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import {html, css, LitElement} from 'lit';
+import {customElement, property, query} from 'lit/decorators.js';
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
 import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
+import {ThemableMixin} from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 @customElement('vcf-nav-item')
-export class NavItem extends LitElement {
-  @property()
-  path = '';
+export class NavItem extends ThemableMixin(LitElement) {
+    @property()
+    path = '';
 
-  @property({ type: Boolean, reflect: true })
-  expanded = false;
+    @property({type: Boolean, reflect: true})
+    expanded = false;
 
-  @property({ type: Boolean, reflect: true })
-  active = false;
+    @property({type: Boolean, reflect: true})
+    active = false;
 
-  @query('button')
-  button: HTMLElement | undefined;
+    @query('button')
+    button: HTMLElement | undefined;
 
-  @query('#children')
-  childrenSlot: HTMLElement | undefined;
+    @query('#children')
+    childrenSlot: HTMLElement | undefined;
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.setAttribute('role', 'listitem');
-    this._updateActive();
-    // @ts-ignore
-    this.__boundUpdateActive = this._updateActive.bind(this);
-    // @ts-ignore
-    window.addEventListener('popstate', this.__boundUpdateActive);
-  }
+    connectedCallback() {
+        super.connectedCallback();
+        this.setAttribute('role', 'listitem');
+        this._updateActive();
+        // @ts-ignore
+        this.__boundUpdateActive = this._updateActive.bind(this);
+        // @ts-ignore
+        window.addEventListener('popstate', this.__boundUpdateActive);
+    }
 
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    // @ts-ignore
-    window.removeEventListener('popstate', this.__boundUpdateActive);
-  }
+    disconnectedCallback() {
+        super.disconnectedCallback();
+        // @ts-ignore
+        window.removeEventListener('popstate', this.__boundUpdateActive);
+    }
 
-  static styles = css`
+    static styles = css`
     :host {
       display: block;
     }
@@ -188,47 +189,47 @@ export class NavItem extends LitElement {
     }
   `;
 
-  render() {
-    return html`
-      <a href="${this.path}" part="item" aria-current="${this.active ? 'page' : false}">
-        <slot name="prefix"></slot>
-        <slot></slot>
-        <slot name="suffix"></slot>
-        <button
-          part="toggle-button"
-          @click="${this.toggleExpanded}"
-          ?hidden="${!this.querySelector('[slot=children]')}"
-          aria-controls="children"
-          aria-expanded="${this.expanded}"
-          aria-label="Toggle child items"></button>
-      </a>
-      <slot name="children" role="list" part="children" id="children" ?hidden="${!this.expanded}"></slot>
-    `;
-  }
-
-  toggleExpanded(e: MouseEvent) {
-    e.preventDefault();
-    e.stopPropagation();
-    this.expanded = !this.expanded;
-  }
-
-  _updateActive() {
-    const hasBaseUri = (document.baseURI != document.location.href);
-    const pathAbsolute = this.path.startsWith("/");
-    if (hasBaseUri && !pathAbsolute) {
-      const pathRelativeToRoot = document.location.pathname;
-      const basePath = new URL(document.baseURI).pathname;
-      const pathWithoutBase = pathRelativeToRoot.substring(basePath.length);
-      const pathRelativeToBase = (basePath !== pathRelativeToRoot && pathRelativeToRoot.startsWith(basePath)) ? pathWithoutBase : pathRelativeToRoot;
-      this.active = pathRelativeToBase === this.path;
-    } else {
-      // Absolute path or no base uri in use. No special comparison needed
-      this.active = document.location.pathname == this.path;
+    render() {
+        return html`
+            <a href="${this.path}" part="item" aria-current="${this.active ? 'page' : false}">
+                <slot name="prefix"></slot>
+                <slot></slot>
+                <slot name="suffix"></slot>
+                <button
+                        part="toggle-button"
+                        @click="${this.toggleExpanded}"
+                        ?hidden="${!this.querySelector('[slot=children]')}"
+                        aria-controls="children"
+                        aria-expanded="${this.expanded}"
+                        aria-label="Toggle child items"></button>
+            </a>
+            <slot name="children" role="list" part="children" id="children" ?hidden="${!this.expanded}"></slot>
+        `;
     }
-    this.toggleAttribute('child-active', document.location.pathname.startsWith(this.path));
 
-    if (this.active) {
-      this.expanded = true;
+    toggleExpanded(e: MouseEvent) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.expanded = !this.expanded;
     }
-  }
+
+    _updateActive() {
+        const hasBaseUri = (document.baseURI != document.location.href);
+        const pathAbsolute = this.path.startsWith("/");
+        if (hasBaseUri && !pathAbsolute) {
+            const pathRelativeToRoot = document.location.pathname;
+            const basePath = new URL(document.baseURI).pathname;
+            const pathWithoutBase = pathRelativeToRoot.substring(basePath.length);
+            const pathRelativeToBase = (basePath !== pathRelativeToRoot && pathRelativeToRoot.startsWith(basePath)) ? pathWithoutBase : pathRelativeToRoot;
+            this.active = pathRelativeToBase === this.path;
+        } else {
+            // Absolute path or no base uri in use. No special comparison needed
+            this.active = document.location.pathname == this.path;
+        }
+        this.toggleAttribute('child-active', document.location.pathname.startsWith(this.path));
+
+        if (this.active) {
+            this.expanded = true;
+        }
+    }
 }
