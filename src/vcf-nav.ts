@@ -24,6 +24,10 @@ export class Nav extends ThemableMixin(LitElement) {
         this.setAttribute('role', 'navigation');
     }
 
+    static get is() {
+        return 'vcf-nav';
+    }
+
     static styles = css`
     :host {
       display: block;

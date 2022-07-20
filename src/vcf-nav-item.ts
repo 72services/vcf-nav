@@ -25,6 +25,10 @@ export class NavItem extends ThemableMixin(LitElement) {
     @query('#children')
     childrenSlot: HTMLElement | undefined;
 
+    static get is() {
+        return 'vcf-nav-item';
+    }
+
     connectedCallback() {
         super.connectedCallback();
         this.setAttribute('role', 'listitem');
