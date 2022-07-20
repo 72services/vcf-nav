@@ -1,8 +1,8 @@
 {
-  "name": "@vaadin-component-factory/vcf-nav",
-  "version": "1.0.6",
-  "homepage": "https://github.com/vaadin-component-factory/vcf-nav",
-  "repository": "https://github.com/vaadin-component-factory/vcf-nav",
+  "name": "@72services/vcf-nav",
+  "version": "1.0.1",
+   "homepage": "https://github.com/simasch/vcf-nav",
+  "repository": "https://github.com/simasch/vcf-nav",
   "description": "",
   "main": "vcf-nav.ts",
   "keywords": [
