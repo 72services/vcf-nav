@@ -225,10 +225,18 @@ export class NavItem extends ThemableMixin(LitElement) {
             const basePath = new URL(document.baseURI).pathname;
             const pathWithoutBase = pathRelativeToRoot.substring(basePath.length);
             const pathRelativeToBase = (basePath !== pathRelativeToRoot && pathRelativeToRoot.startsWith(basePath)) ? pathWithoutBase : pathRelativeToRoot;
-            this.active = pathRelativeToBase === this.path;
+            if ((pathRelativeToBase === "" || pathRelativeToBase === "/") && (this.path === "" || this.path === "/")) {
+                this.active = true;
+            } else {
+                this.active = pathRelativeToBase === this.path;
+            }
         } else {
             // Absolute path or no base uri in use. No special comparison needed
-            this.active = document.location.pathname == this.path;
+            if ((document.location.pathname === "" || document.location.pathname === "/") && (this.path === "" || this.path === "/")) {
+                this.active = true;
+            } else {
+                this.active = document.location.pathname == this.path;
+            }
         }
         this.toggleAttribute('child-active', document.location.pathname.startsWith(this.path));
 
